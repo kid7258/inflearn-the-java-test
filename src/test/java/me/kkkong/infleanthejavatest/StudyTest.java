@@ -1,16 +1,37 @@
 package me.kkkong.infleanthejavatest;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 
 import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.*;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class) // 메서드명의 언더스코어를 띄어쓰기로 변경
 class StudyTest {
 
     @Test
+    @DisplayName("스터디 만들기")
+    @EnabledOnOs({OS.MAC, OS.LINUX}) // OS 별 테스트 가능
+    void create_new_study() {
+        // @EnabledIfEnvironmentVariable(named = "TEST_ENV", matches = "LOCAL") 로 변경 가능
+        String testEnv = System.getenv("TEST_ENV");
+        System.out.println("testEnv = " + testEnv);
+        assumeTrue("LOCAL".equalsIgnoreCase(testEnv));
+
+        assumingThat("LOCAL".equalsIgnoreCase(testEnv), () -> {
+            Study study = new Study(10);
+            assertTrue(study.getLimit() > 0);
+        });
+    }
+
+    @Test
     @DisplayName("스터디 생성")
+    @DisabledOnOs(OS.WINDOWS)
     void create() {
         Study study = new Study(10);
 
@@ -37,14 +58,6 @@ class StudyTest {
                 () -> assertEquals(StudyStatus.DRAFT, study.getStatus(), "스터디를 처음 만들면, 상태 값이 DRAFT여야 한다."),
                 () -> assertTrue(study.getLimit() > 0, "스터디 최대 참석 가능 인원은 0보다 커야한다.")
         );
-    }
-
-    @Test
-    @Disabled // 미사용 시
-    void create1() {
-        Study study = new Study(-10);
-        assertNotNull(study);
-        System.out.println("create1");
     }
 
     @BeforeAll
