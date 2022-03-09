@@ -15,6 +15,20 @@ import static org.junit.jupiter.api.Assumptions.*;
 class StudyTest {
 
     @Test
+    @DisplayName("태깅 테스트 - fast")
+    @Tag("fast")
+    void tagging_test_fast() {
+        // 실행 환경에서 tags 값을 설정해서 일치하는 tags만 실행 가능
+    }
+
+    @Test
+    @DisplayName("태깅 테스트 - slow")
+    @Tag("slow")
+    void tagging_test_slow() {
+
+    }
+
+    @Test
     @DisplayName("스터디 만들기")
     @EnabledOnOs({OS.MAC, OS.LINUX}) // OS 별 테스트 가능
     void create_new_study() {
