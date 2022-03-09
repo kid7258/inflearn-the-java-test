@@ -5,6 +5,8 @@ import org.junit.jupiter.api.condition.DisabledOnOs;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.time.Duration;
 
@@ -13,6 +15,20 @@ import static org.junit.jupiter.api.Assumptions.*;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class) // 메서드명의 언더스코어를 띄어쓰기로 변경
 class StudyTest {
+
+    @DisplayName("파라미터를 이용한 반복 테스트")
+    @ParameterizedTest(name = "{displayName} {index} message={0}")
+    @ValueSource(strings = {"날씨가", "따뜻해지고", "있네요"})
+    void parameterizedTest(String message) {
+        System.out.println(message);
+    }
+
+    @DisplayName("반복 테스트")
+    @RepeatedTest(value = 10, name = "{displayName}, {currentRepetition}/{totalRepetitions}")
+    void repeatTEST(RepetitionInfo repetitionInfo) {
+        System.out.println("test " + repetitionInfo.getCurrentRepetition() + "/" +
+                repetitionInfo.getTotalRepetitions());
+    }
 
     @FastTest
     @DisplayName("태깅 테스트 - fast")
