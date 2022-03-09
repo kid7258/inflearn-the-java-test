@@ -14,14 +14,14 @@ import static org.junit.jupiter.api.Assumptions.*;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class) // 메서드명의 언더스코어를 띄어쓰기로 변경
 class StudyTest {
 
-    @Test
+    @FastTest
     @DisplayName("태깅 테스트 - fast")
     @Tag("fast")
     void tagging_test_fast() {
         // 실행 환경에서 tags 값을 설정해서 일치하는 tags만 실행 가능
     }
 
-    @Test
+    @SlowTest
     @DisplayName("태깅 테스트 - slow")
     @Tag("slow")
     void tagging_test_slow() {
