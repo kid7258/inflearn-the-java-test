@@ -23,8 +23,8 @@ import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
-@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class) // 메서드명의 언더스코어를 띄어쓰기로 변경
-@TestInstance(TestInstance.Lifecycle.PER_CLASS) // 얘가 없으면 기본적으로 메서드마다 인스턴스를 생성함
+// @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class) // 메서드명의 언더스코어를 띄어쓰기로 변경
+// @TestInstance(TestInstance.Lifecycle.PER_CLASS) // 얘가 없으면 기본적으로 메서드마다 인스턴스를 생성함
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class) // 테스트 순서를 보장하게 함 @Order
 class StudyTest {
 
@@ -34,6 +34,7 @@ class StudyTest {
     @DisplayName("파라미터를 이용한 반복 테스트 - 2")
     @ParameterizedTest(name = "{displayName} {index} message={0}")
     @CsvSource({"10, '자바 스터디", "20, 스프링"})
+    @Disabled
     void parameterizedTestByCsvSource(@AggregateWith(StudyAggregator.class) Study study) {
         System.out.println(this);
         System.out.println(value++);
@@ -82,14 +83,12 @@ class StudyTest {
     }
 
     @FastTest
-    @DisplayName("태깅 테스트 - fast")
     @Tag("fast")
     void tagging_test_fast() {
         // 실행 환경에서 tags 값을 설정해서 일치하는 tags만 실행 가능
     }
 
     @SlowTest
-    @DisplayName("태깅 테스트 - slow")
     @Tag("slow")
     void tagging_test_slow() {
 
@@ -143,13 +142,13 @@ class StudyTest {
 
     // @TestInstance(TestInstance.Lifecycle.PER_CLASS) 얘로 인해 static으로 생성할 필요가 없음
     @BeforeAll
-    void beforeAll() {
+    static void beforeAll() {
         System.out.println("실행 전에 한 번만 실행 됨");
     }
 
     // @TestInstance(TestInstance.Lifecycle.PER_CLASS) 얘로 인해 static으로 생성할 필요가 없음
     @AfterAll
-    void afterAll() {
+    static void afterAll() {
         System.out.println("실행 후에 한 번만 실행 됨");
     }
 
