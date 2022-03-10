@@ -25,11 +25,13 @@ import static org.junit.jupiter.api.Assumptions.*;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class) // 메서드명의 언더스코어를 띄어쓰기로 변경
 @TestInstance(TestInstance.Lifecycle.PER_CLASS) // 얘가 없으면 기본적으로 메서드마다 인스턴스를 생성함
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class) // 테스트 순서를 보장하게 함 @Order
 class StudyTest {
 
     int value = 1;
 
-    @DisplayName("파라미터를 이용한 반복 테스트")
+    @Order(2)
+    @DisplayName("파라미터를 이용한 반복 테스트 - 2")
     @ParameterizedTest(name = "{displayName} {index} message={0}")
     @CsvSource({"10, '자바 스터디", "20, 스프링"})
     void parameterizedTestByCsvSource(@AggregateWith(StudyAggregator.class) Study study) {
@@ -46,7 +48,8 @@ class StudyTest {
         }
     }
 
-    @DisplayName("파라미터를 이용한 반복 테스트")
+    @Order(1)
+    @DisplayName("파라미터를 이용한 반복 테스트 - 1")
     @ParameterizedTest(name = "{displayName} {index} message={0}")
     @ValueSource(ints = {10, 20, 40})
     // @NullAndEmptySource
@@ -54,7 +57,8 @@ class StudyTest {
         System.out.println(limit);
     }
 
-    @DisplayName("파라미터를 이용한 반복 테스트")
+    @Order(3)
+    @DisplayName("파라미터를 이용한 반복 테스트 - 3")
     @ParameterizedTest(name = "{displayName} {index} message={0}")
     @ValueSource(ints = {10, 20, 40})
     void parameterizedTestByConverter(@ConvertWith(StudyConverter.class) Study study) {
