@@ -24,18 +24,24 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class) // 메서드명의 언더스코어를 띄어쓰기로 변경
+@TestInstance(TestInstance.Lifecycle.PER_CLASS) // 얘가 없으면 기본적으로 메서드마다 인스턴스를 생성함
 class StudyTest {
+
+    int value = 1;
 
     @DisplayName("파라미터를 이용한 반복 테스트")
     @ParameterizedTest(name = "{displayName} {index} message={0}")
     @CsvSource({"10, '자바 스터디", "20, 스프링"})
     void parameterizedTestByCsvSource(@AggregateWith(StudyAggregator.class) Study study) {
+        System.out.println(this);
+        System.out.println(value++);
         System.out.println(study);
     }
 
     static class StudyAggregator implements ArgumentsAggregator {
         @Override
         public Object aggregateArguments(ArgumentsAccessor argumentsAccessor, ParameterContext parameterContext) throws ArgumentsAggregationException {
+            System.out.println(this);
             return new Study(argumentsAccessor.getInteger(0), argumentsAccessor.getString(1));
         }
     }
@@ -43,7 +49,7 @@ class StudyTest {
     @DisplayName("파라미터를 이용한 반복 테스트")
     @ParameterizedTest(name = "{displayName} {index} message={0}")
     @ValueSource(ints = {10, 20, 40})
-    @NullAndEmptySource
+    // @NullAndEmptySource
     void parameterizedTest(Integer limit) {
         System.out.println(limit);
     }
@@ -109,13 +115,13 @@ class StudyTest {
         // 실행 시간 테스트
         assertTimeout(Duration.ofMillis(100), () -> {
             new Study(10);
-            Thread.sleep(300);
+            Thread.sleep(30);
         });
 
         // TODO ThreadLocal 확인 필요, 얘는 즉시 종료 됨
         assertTimeoutPreemptively(Duration.ofMillis(100), () -> {
             new Study(10);
-            Thread.sleep(300);
+            Thread.sleep(30);
         });
 
         // 예외 테스트
@@ -131,13 +137,15 @@ class StudyTest {
         );
     }
 
+    // @TestInstance(TestInstance.Lifecycle.PER_CLASS) 얘로 인해 static으로 생성할 필요가 없음
     @BeforeAll
-    static void beforeAll() {
+    void beforeAll() {
         System.out.println("실행 전에 한 번만 실행 됨");
     }
 
+    // @TestInstance(TestInstance.Lifecycle.PER_CLASS) 얘로 인해 static으로 생성할 필요가 없음
     @AfterAll
-    static void afterAll() {
+    void afterAll() {
         System.out.println("실행 후에 한 번만 실행 됨");
     }
 
