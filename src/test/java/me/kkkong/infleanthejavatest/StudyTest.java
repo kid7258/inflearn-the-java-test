@@ -5,7 +5,9 @@ import org.junit.jupiter.api.condition.DisabledOnOs;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.ParameterContext;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.AggregateWith;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
@@ -25,10 +27,13 @@ import static org.junit.jupiter.api.Assumptions.*;
 
 // @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class) // 메서드명의 언더스코어를 띄어쓰기로 변경
 // @TestInstance(TestInstance.Lifecycle.PER_CLASS) // 얘가 없으면 기본적으로 메서드마다 인스턴스를 생성함
+// @ExtendWith(FindSlowTestExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class) // 테스트 순서를 보장하게 함 @Order
 class StudyTest {
-
     int value = 1;
+
+    @RegisterExtension
+    static FindSlowTestExtension findSlowTestExtension = new FindSlowTestExtension(1000L);
 
     @Order(2)
     @DisplayName("파라미터를 이용한 반복 테스트 - 2")
@@ -53,8 +58,8 @@ class StudyTest {
     @DisplayName("파라미터를 이용한 반복 테스트 - 1")
     @ParameterizedTest(name = "{displayName} {index} message={0}")
     @ValueSource(ints = {10, 20, 40})
-    // @NullAndEmptySource
-    void parameterizedTest(Integer limit) {
+    void parameterizedTest(Integer limit) throws InterruptedException {
+        Thread.sleep(1005L);
         System.out.println(limit);
     }
 
