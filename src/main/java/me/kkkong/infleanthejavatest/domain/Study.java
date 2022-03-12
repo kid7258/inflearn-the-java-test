@@ -1,9 +1,12 @@
-package me.kkkong.infleanthejavatest;
+package me.kkkong.infleanthejavatest.domain;
+
+import me.kkkong.infleanthejavatest.study.StudyStatus;
 
 public class Study {
     private StudyStatus status = StudyStatus.DRAFT;
     private int limit;
     private String name;
+    private Member owner;
 
     public Study(int limit, String name) {
         this.limit = limit;
@@ -27,6 +30,10 @@ public class Study {
 
     public String getName() {
         return name;
+    }
+
+    public void setOwner(Member owner) {
+        this.owner = owner;
     }
 
     @Override
