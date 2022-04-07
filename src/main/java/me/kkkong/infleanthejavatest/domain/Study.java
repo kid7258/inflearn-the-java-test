@@ -36,6 +36,10 @@ public class Study {
         this.owner = owner;
     }
 
+    public Member getOwner() {
+        return owner;
+    }
+
     @Override
     public String toString() {
         return "Study{" +
