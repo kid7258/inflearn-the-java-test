@@ -6,6 +6,7 @@ import me.kkkong.infleanthejavatest.member.MemberService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InOrder;
 import org.mockito.Mock;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -64,5 +65,15 @@ public class StudyServiceTest {
         studyService.createNewStudy(1L, study);
         assertNotNull(study.getOwner());
         assertEquals(member, study.getOwner());
+
+        // 호출된 횟수 검증
+        verify(memberService, times(1)).notify(study);
+        verify(memberService, times(1)).notify(member);
+        verify(memberService, never()).validate(any());
+
+        // 호출 순서 검증
+        InOrder inOrder = inOrder(memberService);
+        inOrder.verify(memberService).notify(study);
+        inOrder.verify(memberService).notify(member);
     }
 }

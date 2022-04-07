@@ -20,6 +20,10 @@ public class StudyService {
     public Study createNewStudy(Long memberId, Study study) {
         Optional<Member> member = memberService.findById(memberId);
         study.setOwner(member.orElseThrow(() -> new IllegalArgumentException("Member does not found.")));
-        return repository.save(study);
+
+        Study newStudy = repository.save(study);
+        memberService.notify(newStudy);
+        memberService.notify(member.get());
+        return newStudy;
     }
 }
