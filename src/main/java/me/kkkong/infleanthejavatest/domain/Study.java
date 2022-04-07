@@ -2,11 +2,14 @@ package me.kkkong.infleanthejavatest.domain;
 
 import me.kkkong.infleanthejavatest.study.StudyStatus;
 
+import java.time.LocalDateTime;
+
 public class Study {
     private StudyStatus status = StudyStatus.DRAFT;
     private int limit;
     private String name;
     private Member owner;
+    private LocalDateTime openedDateTime;
 
     public Study(int limit, String name) {
         this.limit = limit;
@@ -38,6 +41,19 @@ public class Study {
 
     public Member getOwner() {
         return owner;
+    }
+
+    public LocalDateTime getOpenedDateTime() {
+        return openedDateTime;
+    }
+
+    public void setOpenedDateTime(LocalDateTime openedDateTime) {
+        this.openedDateTime = openedDateTime;
+    }
+
+    public void open() {
+        this.status = StudyStatus.OPENED;
+        this.openedDateTime = LocalDateTime.now();
     }
 
     @Override
