@@ -6,6 +6,7 @@ import me.kkkong.infleanthejavatest.member.MemberService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.BDDMockito;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 
@@ -50,6 +51,7 @@ public class StudyServiceTest {
 
     @Test
     void createNewStudy() {
+        // Given
         StudyService studyService = new StudyService(memberService, studyRepository);
         assertNotNull(studyService);
 
@@ -62,9 +64,19 @@ public class StudyServiceTest {
         when(memberService.findById(1L)).thenReturn(Optional.of(member));
         when(studyRepository.save(study)).thenReturn(study);
 
+        // BDD 스타일
+        BDDMockito.given(memberService.findById(1l)).willReturn(Optional.of(member));
+        BDDMockito.given(studyRepository.save(study)).willReturn(study);
+
+        // When
         studyService.createNewStudy(1L, study);
+
+        // Then
         assertNotNull(study.getOwner());
         assertEquals(member, study.getOwner());
+
+        // Then BDD 스타일
+        BDDMockito.then(memberService).should(times(1)).notify(study);
 
         // 호출된 횟수 검증
         verify(memberService, times(1)).notify(study);
